@@ -91,8 +91,12 @@
             <div class="card-body">
                 <div class="small text-muted">{{p.created_at}}</div>
                 <h2 class="card-title h4">{{p.title}}</h2>
-                <p class="card-text">{{p.content}}</p>
+                {% if p.hook_text %}
+                    <h5 class="text-muted">{{p.hook_text}}</h5>
+                {% endif %}
+                <p class="card-text">{{p.content | truncatewords:30}}</p>
                 <a class="btn btn-primary" href="{{p.get_absolute_url}}">Read more →</a>
+                <div class="card-footer text-muted">Posted on {{p.created_at}} by <a href="#">작성자</a></div>
             </div>
         </div>
         {% endfor %}
