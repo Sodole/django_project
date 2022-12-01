@@ -235,7 +235,7 @@ class TestView(TestCase):
         self.assertNotIn(self.tag_python.name, post_area.text)
         self.assertNotIn(self.tag_python_kor.name, post_area.text)
 
-    def test_creat_post(self):
+    def test_create_post(self):
         # 로그인하지 않으면 status code가 안된다.
         response = self.client.get('/blog/create_post/')
         self.assertNotEqual(response.status_code, 200)
@@ -261,17 +261,26 @@ class TestView(TestCase):
         main_area = soup.find("div", id="main-area")
         self.assertIn("Create New Post", main_area.text)
 
+        tag_str_input = main_area.find("input", id="id_tags_str")
+        self.assertTrue(tag_str_input)
+
         self.client.post(
             '/blog/create_post/',
             {
                 "title" : "Post Form 만들기",
                 "content" : "Post Form 페이지를 만듭시다.",
+                "tags_str" : "new tag; 한글 태그, python"
             }
         )
         self.assertEqual(Post.objects.count(), 4)
         last_post = Post.objects.last()
         self.assertEqual(last_post.title, "Post Form 만들기")
         self.assertEqual(last_post.author.username, "obama")
+
+        self.assertEqual(last_post.tags.count(), 3)
+        self.assertTrue(Tag.objects.get(name="new tag"))
+        self.assertTrue(Tag.objects.get(name="한글 태그"))
+        self.assertEqual(Tag.objects.count(), 5)
 
     def test_update_post(self):
         update_post_url = f"/blog/update_post/{self.post_003.pk}/"
