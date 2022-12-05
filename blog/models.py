@@ -72,6 +72,9 @@ class Comment(models.Model):
     def __str__(self):
         return f"{self.author}::{self.content}"
 
+    class Meta:
+        ordering = ['-created_at']
+
     def get_absolute_url(self):
         return f"{self.post.get_absolute_url()}#comment-{self.pk}"
 
