@@ -83,11 +83,9 @@
             <div class="card-body">
                 {% if user.is_authenticated %}
                 <!-- Comment form-->
-                <form class="mb-4" id="comment-form" method="POST" action="{{post.get_absolute_url}}new_comment/">
+                <form class="mb-4" id="comment-form" method="POST" action="{{ post.get_absolute_url }}new_comment/">
                     {% csrf_token %}
-                    <div class="form-group">
-                        {{comment_form | crispy}}
-                    </div>
+                    <div class="form-group">{{comment_form | crispy}}</div>
                     <button type = "submit" class="btn btn-primary float-right">Submit</button>
                 </form>
                 {% else %}
@@ -100,15 +98,17 @@
         {% if post.comment_set.exists %}
             {% for comment in post.comment_set.iterator %}
             <!-- Single comment-->
-            <div class="media" id="comment-{{comment.pk}}">
-                <img class="my-4 mb-0 d-flex rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." />
-                {% if user.is_authenticated and comment.author == user %}
-                    <a role="button" class btn btn-sm btn-info float-right id="comment-{{comment.pk}}-update-btn" href="/blog/update_comment/{{comment.pk}}/">edit</a>
-                {% endif %}
-                <div class="card-body mb-0">
-                    <h5 class="mt-0">{{comment.author.username}} &nbsp;&nbsp;<small class="text-mute">{{comment.created_at}}</small>
-                    </h5>
-                    <p>{{comment.content | linebreaks}}</p>
+            <div class="media mb-2 mt-2" id="comment-{{comment.pk}}">
+                <img class="mr-3 d-flex rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." />
+                <div class="media-body">
+                    {% if user.is_authenticated and comment.author == user %}
+                    <a role="button" class="btn btn-sm btn-info float-right" id="comment-{{comment.pk}}-update-btn" href="/blog/update_comment/{{comment.pk}}/">edit</a>
+                    {% endif %}
+                    <h5 class="mt-0">{{comment.author.username}} &nbsp;&nbsp;<small class="text-mute">{{comment.created_at}}</small></h5>
+                        <p>{{comment.content | linebreaks}}</p>
+                    {% if comment.created_at != comment.modified_at %}
+                        <p class="text-muted float-right"><small>Updated: {{comment.modified_at}}</small></p>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}
