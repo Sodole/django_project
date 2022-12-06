@@ -40,5 +40,5 @@ class TestView(TestCase):
         body = soup.body
         self.assertNotIn(post_001.title, body.text)
         self.assertIn(post_002.title, body.text)
-        self.assertIn(post_003, body.text)
-        self.assertIn(post_004, body.text)
+        self.assertIn(post_003.title, body.text)
+        self.assertIn(post_004.title, body.text)

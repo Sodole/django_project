@@ -65,7 +65,7 @@ class TestView(TestCase):
         self.assertIn("About Me", navbar.text)
 
         # 1.1 대문으로 잘 이동하는지 확인
-        logo_btn = navbar.find("a", text="Navbar")
+        logo_btn = navbar.find("a", text="Sodole")
         self.assertEqual(logo_btn.attrs['href'], '/')
 
         # 1.2 홈으로 잘 이동하는지 확인
